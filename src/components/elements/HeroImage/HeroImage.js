@@ -3,11 +3,11 @@ import './HeroImage.css';
 
 const HeroImage = (props)=>{
 
-     return HeroImage = () =>{
+     return(
          <div>
              HeroImage
          </div>
-     }
+     );
 
 }
 

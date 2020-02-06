@@ -3,9 +3,11 @@ import './FourColGrid.css';
 
 const FourColGrid = (props)=>{
 
+   return(
    <div>
        FourColGrid
    </div>
+   );
 
 }
 
