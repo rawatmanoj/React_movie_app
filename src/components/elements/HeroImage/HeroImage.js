@@ -3,7 +3,7 @@ import './HeroImage.css';
 import Swiper from 'react-id-swiper';
 
 const HeroImage = (props)=>{
- console.log(4);
+ console.log(props.image);
 
  const params = {
     pagination: {

@@ -12,8 +12,7 @@ import Spinner from '../elements/Spinner/Spinner';
 class Home extends React.Component{
     state={
         movies:[],
-        // HeroImage:null,
-        HeroImage:[],
+         heroImage:null,
         loading:false,
         currentPage:0,
         totalPages:0,
@@ -73,8 +72,7 @@ class Home extends React.Component{
             console.log(response);
             this.setState({
                 movies:[...this.state.movies,...response.results],
-                // HeroImage: this.state.HeroImage || response.results[6],
-                 HeroImage:[response.results[0],response.results[1],response.results[3]],
+                 heroImage: this.state.heroImage || response.results[6],
                 loading:false,
                 currentPage:response.page,
                 totalPages:response.total_pages
@@ -82,71 +80,73 @@ class Home extends React.Component{
         })
     }
 
-    renderHeroImage=()=>{
-        console.log(this.state.HeroImage);
-        if(this.state.HeroImage){  
-          this.state.HeroImage.map((item, i) => {
-              //console.log(item.backdrop_path);
-              if (i < 3) {
-                console.log(item.original_title);
-                 return (
+//     renderHeroImage=()=>{
+//         console.log(this.state.HeroImage);
+//         if(this.state.HeroImage){  
+//           this.state.HeroImage.map((item, i) => {
+//               //console.log(item.backdrop_path);
+//               if (i < 3) {
+//                 console.log(item.original_title);
+//                  return (
                     
-                    <div>
-                        <HeroImage
-                        image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${item.backdrop_path}`}
-                        title={item.original_title}
-                        text={item.overview}
-                        />
-                        <SearchBar callback={this.searchItems}/>
-                    </div>
+//                     <div>
+//                         <HeroImage
+//                         image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${item.backdrop_path}`}
+//                         title={item.original_title}
+//                         text={item.overview}
+//                         />
+//                         <SearchBar callback={this.searchItems}/>
+//                     </div>
              
-                 )
-             }   
-            })
-       }else{
-           return null;
-       }
-   }
+//                  )
+//              }   
+//             })
+//        }else{
+//            return null;
+//        }
+//    }
 
     
 
-    render(){
-        // console.log(this.state.HeroImage);
-        // console.log(this.state.movies);
-        return(
-            <div className="rmdb-home">
-            
-                {
-                this.renderHeroImage() 
-                }
-            
-                
-                <div className="rmdb-home-grid">
-                <FourColGrid 
-                header={this.state.SearchTerm?'Search Results':'Popular Movies'}
-                loading={this.state.loading}
-                >
-                {this.state.movies.map((element,i)=>{
-                    return <MovieThumb
-                            key={i}
-                            clickable={true}
-                            image={element.poster_path?`${IMAGE_BASE_URL}${POSTER_SIZE}${element.poster_path}`:'./images/no_image.jpg'}
-                            movieId={element.id}
-                            movieName={element.original_title}
-                    />
-                })}
-                
+render() {
+    // ES6 Destructuring the state
+    const { movies, heroImage, loading, currentPage, totalPages, searchTerm } = this.state;
 
-                </FourColGrid>
-                {this.state.loading?<Spinner/>:null}
-                {(this.state.currentPage<=this.state.totalPages && !this.state.loading)?
-                <LoadMoreBtn onClick={this.loadMoreItems}/>
-                :null}
-                </div>
-                
-            </div>
-        );
-    }
+    return (
+      <div className="rmdb-home">
+        {heroImage ?
+          <div>
+            <HeroImage
+              image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${heroImage.backdrop_path}`}
+              title={heroImage.original_title}
+              text={heroImage.overview}
+            />
+            <SearchBar callback={this.searchItems}/>
+          </div> : null }
+          <div className="rmdb-home-grid">
+            <FourColGrid
+              header={searchTerm ? 'Search Result' : 'Popular Movies'}
+              loading={loading}
+            >
+              {movies.map( (element, i) => (
+                <MovieThumb
+                  key={i}
+                  clickable={true}
+                  image={element.poster_path ? `${IMAGE_BASE_URL}${POSTER_SIZE}${element.poster_path}` : './images/no_image.jpg'}
+                  movieId={element.id}
+                  movieName={element.original_title}
+                />
+              ))}
+            </FourColGrid>
+            {loading ? <Spinner /> : null}
+            {(currentPage <= totalPages && !loading) ?
+              <LoadMoreBtn text="Load More" onClick={this.loadMoreItems} />
+              : null
+            }
+          </div>
+      </div>
+    )
+  }
 }
 
-export default Home
+export default Home;
