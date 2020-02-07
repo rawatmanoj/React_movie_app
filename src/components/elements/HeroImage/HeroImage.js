@@ -1,9 +1,23 @@
 import React from 'react';
 import './HeroImage.css';
+import Swiper from 'react-id-swiper';
 
 const HeroImage = (props)=>{
- //console.log(props);
+ console.log(4);
+
+ const params = {
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'progressbar',
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    }
+  }
      return(
+        <Swiper {...params}>
+
          <div className="rmdb-heroimage"
           style={{
               background:
@@ -20,8 +34,33 @@ const HeroImage = (props)=>{
                 </div>
             </div>
          </div>
+         
+         </Swiper>
+
      );
 
 }
 
 export default HeroImage;
+// const HeroImage = () => {
+//     const params = {
+//       pagination: {
+//         el: '.swiper-pagination',
+//         type: 'progressbar',
+//       },
+//       navigation: {
+//         nextEl: '.swiper-button-next',
+//         prevEl: '.swiper-button-prev',
+//       }
+//     }
+//     return (
+//       <Swiper {...params}>
+//         <div>Slide #1</div>
+//         <div>Slide #2</div>
+//         <div>Slide #3</div>
+//         <div>Slide #4</div>
+//         <div>Slide #5</div>
+//       </Swiper>
+//     )
+//   };
+//   export default HeroImage;

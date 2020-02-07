@@ -7,11 +7,13 @@ import FourColGrid from '../elements/FourColGrid/FourColGrid';
 import MovieThumb from '../elements/MovieThumb/MovieThumb';
 import LoadMoreBtn from '../elements/LoadMoreBtn/LoadMoreBtn';
 import Spinner from '../elements/Spinner/Spinner';
+// import Swiper from '../elements/swiper';
 
 class Home extends React.Component{
     state={
         movies:[],
-        HeroImage:null,
+        // HeroImage:null,
+        HeroImage:[],
         loading:false,
         currentPage:0,
         totalPages:0,
@@ -68,10 +70,11 @@ class Home extends React.Component{
         fetch(endPoint)
         .then(result=>result.json())
         .then(response=>{
-           // console.log(response);
+            console.log(response);
             this.setState({
                 movies:[...this.state.movies,...response.results],
-                HeroImage: this.state.HeroImage || response.results[6],
+                // HeroImage: this.state.HeroImage || response.results[6],
+                 HeroImage:[response.results[0],response.results[1],response.results[3]],
                 loading:false,
                 currentPage:response.page,
                 totalPages:response.total_pages
@@ -79,20 +82,45 @@ class Home extends React.Component{
         })
     }
 
-    render(){
-        //console.log(this.state.HeroImage);
-        return(
-            <div className="rmdb-home">
-                {this.state.HeroImage?
+    renderHeroImage=()=>{
+        console.log(this.state.HeroImage);
+        if(this.state.HeroImage){  
+          this.state.HeroImage.map((item, i) => {
+              //console.log(item.backdrop_path);
+              if (i < 3) {
+                console.log(item.original_title);
+                 return (
+                    
                     <div>
                         <HeroImage
-                        image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${this.state.HeroImage.backdrop_path}`}
-                        title={this.state.HeroImage.original_title}
-                        text={this.state.HeroImage.overview}
+                        image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${item.backdrop_path}`}
+                        title={item.original_title}
+                        text={item.overview}
                         />
                         <SearchBar callback={this.searchItems}/>
                     </div>
-                :null}
+             
+                 )
+             }   
+            })
+       }else{
+           return null;
+       }
+   }
+
+    
+
+    render(){
+        // console.log(this.state.HeroImage);
+        // console.log(this.state.movies);
+        return(
+            <div className="rmdb-home">
+            
+                {
+                this.renderHeroImage() 
+                }
+            
+                
                 <div className="rmdb-home-grid">
                 <FourColGrid 
                 header={this.state.SearchTerm?'Search Results':'Popular Movies'}
