@@ -80,41 +80,47 @@ class Home extends React.Component{
         })
     }
 
-//     renderHeroImage=()=>{
-//         console.log(this.state.HeroImage);
-//         if(this.state.HeroImage){  
-//           this.state.HeroImage.map((item, i) => {
-//               //console.log(item.backdrop_path);
-//               if (i < 3) {
-//                 console.log(item.original_title);
-//                  return (
-                    
-//                     <div>
-//                         <HeroImage
-//                         image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${item.backdrop_path}`}
-//                         title={item.original_title}
-//                         text={item.overview}
-//                         />
-//                         <SearchBar callback={this.searchItems}/>
-//                     </div>
-             
-//                  )
-//              }   
-//             })
-//        }else{
-//            return null;
-//        }
-//    }
+    renderHeroImage=()=>{
+      const { heroImage} = this.state;
+
+        //console.log(this.state.heroImage);
+        if(this.state.heroImage){  
+         return (
+          <div>
+          <HeroImage
+            image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${heroImage.backdrop_path}`}
+            title={heroImage.original_title}
+            text={heroImage.overview}
+          />
+          <SearchBar callback={this.searchItems}/>
+        </div>
+
+
+         );
+       }else{
+           return null;
+       }
+   }
+
+   renderMovieThumb = this.state.movies.map( (element, i) => (
+    <MovieThumb
+      key={i}
+      clickable={true}
+      image={element.poster_path ? `${IMAGE_BASE_URL}${POSTER_SIZE}${element.poster_path}` : './images/no_image.jpg'}
+      movieId={element.id}
+      movieName={element.original_title}
+    />
+  ))
 
     
 
 render() {
     // ES6 Destructuring the state
-    const { movies, heroImage, loading, currentPage, totalPages, searchTerm } = this.state;
+     const { movies, loading, currentPage, totalPages, searchTerm } = this.state;
 
     return (
       <div className="rmdb-home">
-        {heroImage ?
+        {/* {heroImage ?
           <div>
             <HeroImage
               image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${heroImage.backdrop_path}`}
@@ -122,13 +128,14 @@ render() {
               text={heroImage.overview}
             />
             <SearchBar callback={this.searchItems}/>
-          </div> : null }
+          </div> : null } */}
+          {this.renderHeroImage()}
           <div className="rmdb-home-grid">
             <FourColGrid
               header={searchTerm ? 'Search Result' : 'Popular Movies'}
               loading={loading}
             >
-              {movies.map( (element, i) => (
+              {/* {movies.map( (element, i) => (
                 <MovieThumb
                   key={i}
                   clickable={true}
@@ -136,7 +143,7 @@ render() {
                   movieId={element.id}
                   movieName={element.original_title}
                 />
-              ))}
+              ))} */}
             </FourColGrid>
             {loading ? <Spinner /> : null}
             {(currentPage <= totalPages && !loading) ?
