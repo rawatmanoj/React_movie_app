@@ -15,8 +15,8 @@ const Navigation = ({ movie }) => (
   </div>
 )
 
-// Navigation.propTypes = {
-//   movie: PropTypes.string
-// }
+Navigation.propTypes = {
+  movie: PropTypes.string
+}
 
 export default Navigation;
